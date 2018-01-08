@@ -6,8 +6,12 @@ class Sql extends PDO {
   public function __construct(){
     $this->setDbName($dbName);
     //$this->con =  new PDO("mysql:dbname=".$this->getDbName().";host=localhost;", "root", "123456");
-    $this->con =  new PDO("mysql:dbname=testes;host=localhost;", "root", "123456");
-
+    try {
+      $this->con =  new PDO("mysql:dbname=testes;host=localhost;", "root", "123456");
+    } catch (\Exception $e) {
+      echo "Falha de conexao [$e]";
+      exit;
+    }
   }
 
   private function setParams($statement, $parameters=array()){

@@ -106,8 +106,46 @@ class Usuario {
       $this->setemail($li['email']);
       $this->setSenha($li['senha']);
       $this->setDtCadastro(new DateTime($li['dt_cadastro']));
+    }else{
+      $this->setIdusuario("nenhum");
+      $this->setNome("nenhum");
+      $this->setemail("nenhum");
+      $this->setSenha("nenhum");
+      $this->setDtCadastro(new DateTime("2018-01-08 12:00:00"));
     }
   }
+
+  public static function  getList(){
+    $sql = new Sql();
+    return $sql->select("SELECT * FROM mteste ORDER BY nome");
+  }
+
+  public static function search($login){
+    $sql = new Sql();
+    return $sql->select("SELECT * FROM mteste WHERE nome like :SEARCH ORDER BY nome", array(
+      'SEARCH'=>"%$login%"
+    ));
+  }
+
+  public function  login($user, $pass){
+    $sql = new Sql();
+    $respSql = $sql->select("SELECT * FROM mteste WHERE nome = :USER and senha = :PASS",   array(
+      ":USER"=>$user,
+      ":PASS"=>$pass
+  ));
+
+    if(count($respSql)==1){
+      $li=$respSql[0];
+      $this->setIdusuario($li['id']);
+      $this->setNome($li['nome']);
+      $this->setemail($li['email']);
+      $this->setSenha($li['senha']);
+      $this->setDtCadastro(new DateTime($li['dt_cadastro']));
+    }else{
+      throw new Exception("Login e Senha inválidos");
+    }
+  }
+
 
   public function __toString(){
     return json_encode(array(
@@ -116,7 +154,7 @@ class Usuario {
       "email"=>$this->getEmail(),
       "senha"=>$this->getSenha(),
       "dt_cadastro"=>$this->getDtCadastro()->format("d/m/Y H:i:s")
-    ));
+    ),JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
   }
 }
 

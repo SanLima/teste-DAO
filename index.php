@@ -10,6 +10,14 @@ $dbName="testes";
 //echo json_encode($que);
 
 $usr=new Usuario($dbName);
-$usr->loadById(3);
+
+//$usr->loadById(16);
+//$usr = Usuario::getList();
+//$usr = Usuario::search("M");
+//echo json_encode($usr);
+
+//Carrega usuario usando login e senha
+$usr->login("Sandro Lima", "123456");
 echo $usr;
+
 ?>
