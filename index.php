@@ -25,8 +25,14 @@ $usr=new Usuario($dbName);
 //$usr->setSenha("bipbip");
 //$usr->insert();
 
-$usr->loadById(20);
-$usr->update("Girafales","professorgirafales@gmail.com", "raraors");
+//update usuario
+//$usr->loadById(20);
+//$usr->update("Girafales","professorgirafales@gmail.com", "raraors");
+
+//delete usuario
+$usr->loadById(3);
+$usr->delete();
+
 echo $usr;
 
 ?>
