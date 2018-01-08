@@ -100,12 +100,7 @@ class Usuario {
     $respSql = $sql->select("SELECT * FROM mteste WHERE id = :ID", array(":ID"=>$id));
 
     if(count($respSql)>0){
-      $li=$respSql[0];
-      $this->setIdusuario($li['id']);
-      $this->setNome($li['nome']);
-      $this->setemail($li['email']);
-      $this->setSenha($li['senha']);
-      $this->setDtCadastro(new DateTime($li['dt_cadastro']));
+      $this->setData($respSql[0]);
     }else{
       $this->setIdusuario("nenhum");
       $this->setNome("nenhum");
@@ -135,17 +130,48 @@ class Usuario {
   ));
 
     if(count($respSql)==1){
-      $li=$respSql[0];
-      $this->setIdusuario($li['id']);
-      $this->setNome($li['nome']);
-      $this->setemail($li['email']);
-      $this->setSenha($li['senha']);
-      $this->setDtCadastro(new DateTime($li['dt_cadastro']));
+      $this->setData($respSql[0]);
+
     }else{
       throw new Exception("Login e Senha inválidos");
     }
   }
 
+  public function setData($data){
+    $this->setIdusuario($data['id']);
+    $this->setNome($data['nome']);
+    $this->setemail($data['email']);
+    $this->setSenha($data['senha']);
+    $this->setDtCadastro(new DateTime($data['dt_cadastro']));
+
+  }
+
+  public function insert(){
+    $sql = new Sql();
+    $res = $sql->select("CALL sp_usuario_insert(:USER, :EMAIL, :PASS)", array(
+      ":USER"=>$this->getNome(),
+      ":EMAIL"=>$this->getEmail(),
+      ":PASS"=>$this->getSenha()
+    ));
+    //print_r($res);
+    if(count($res)>0){
+      $this->setData($res[0]);
+    }
+  }
+
+  public function update($user="", $email="", $pass=""){
+    $this->setNome($user);
+    $this->setEmail($email);
+    $this->setSenha($pass);
+
+    $sql = new Sql();
+    $res = $sql->query("UPDATE mteste SET nome= :USER, email = :EMAIL,  senha= :PASS WHERE id= :ID", array(
+      ":USER"=>$this->getNome(),
+      ":EMAIL"=>$this->getEmail(),
+      ":PASS"=>$this->getSenha(),
+      ":ID"=>$this->getIdusuario()
+    ));
+  }
 
   public function __toString(){
     return json_encode(array(

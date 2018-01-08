@@ -17,7 +17,16 @@ $usr=new Usuario($dbName);
 //echo json_encode($usr);
 
 //Carrega usuario usando login e senha
-$usr->login("Sandro Lima", "123456");
+//$usr->login("Sandro Lima", "123456");
+
+//gerando novo logim
+//$usr->setNome("papaleguas");
+//$usr->setEmail("papaleguas@gmail.com");
+//$usr->setSenha("bipbip");
+//$usr->insert();
+
+$usr->loadById(20);
+$usr->update("Girafales","professorgirafales@gmail.com", "raraors");
 echo $usr;
 
 ?>
